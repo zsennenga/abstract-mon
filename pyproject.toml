@@ -1,0 +1,85 @@
+[project]
+dependencies = [
+  "autoflake>=2.3.1",
+  "black>=25.1.0",
+  "flake8>=7.3.0",
+  "flynt>=1.0.2",
+  "mypy>=1.17.0",
+  "pydantic>=2.11.7"
+]
+description = "Add your description here"
+name = "abstract-mon"
+readme = "README.md"
+requires-python = ">=3.13"
+version = "0.1.0"
+
+[tool.flake8]
+extend-ignore = ["INP001"]
+
+[tool.mypy]
+disable_error_code = [
+  # Do not require stubs for every module.
+  "import",
+  # We're seeing some very odd errors with this enabled.
+  "name-defined",
+  # Flag type errors at definition, not call sites.
+  "no-untyped-call"
+]
+enable_error_code = [
+  # Always specify which type error we're ignoring.
+  "ignore-without-code"
+]
+exclude = '^\.venv/'
+files = "."
+local_partial_types = true
+mypy_path = "mypy_stubs"
+no_implicit_reexport = false
+plugins = [
+  "pydantic.mypy"
+]
+pretty = true
+strict = true
+strict_optional = true
+warn_unreachable = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = false
+module = [
+  "django_scim"
+]
+
+[tool.pydocstyle]
+inherit = false
+select = [
+  "D201",
+  "D202",
+  "D206",
+  "D207",
+  "D208",
+  "D209",
+  "D210",
+  "D211",
+  "D300",
+  "D301",
+  "D302"
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "sophium.settings"
+# -Wignore: ignore warnings
+# --no-migrations: create test databases from models instead of running migrations sequentially
+# --maxprocesses=8: limit parallelism at 8 to avoid:
+# > django.db.utils.OperationalError: out of shared memory
+# > HINT:  You might need to increase max_locks_per_transaction."
+# --dist=loadfile: group tests by file for fastest test execution
+addopts = """
+-Wignore
+--no-migrations
+--maxprocesses=8
+--dist=loadfile
+"""
+# disable pytest-specific class discovery
+python_classes = ""
+# disable pytest-specific function discovery
+python_functions = ""

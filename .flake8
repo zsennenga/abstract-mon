@@ -1,0 +1,27 @@
+[flake8]
+# (black compatibility)
+max-line-length = 88
+# G extension: https://github.com/globality-corp/flake8-logging-format
+enable-extensions=G
+per-file-ignores =
+    bin/*:INP001
+    manage.py:INP001
+    */__init__.py:F401,F403
+    */test_*.py:F841,
+    */tests.py:F841,
+    */migrations/*.py:F841,
+    gunicorn.conf.py:INP001
+extend-ignore =
+    # line too long (black compatibility)
+    E501,
+    # Whitespace before ':' (black compatibility)
+    E203,
+    # F-strings are pervasive in our logging
+    G004,
+    # no
+    INP001
+exclude =
+    .git,
+    .venv,
+    venv,
+    __pycache__
