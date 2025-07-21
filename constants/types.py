@@ -23,4 +23,4 @@ class PokemonType(Enum):
     NO_TYPE = "no_type"
 
 
-# TODO define type chart
+# TODO (GG) define type chart
