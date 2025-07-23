@@ -8,10 +8,6 @@ from model.game_action import MoveAction, SwitchAction
 from model.pokemon import Pokemon
 from model.trainer import Trainer
 
-# 1. We do not support run lol
-# 2. We do not support item in battle
-# 3. Move or Switch
-
 
 class Battle(BaseModel):
     trainer_player_side: Trainer
@@ -19,19 +15,17 @@ class Battle(BaseModel):
     battle_state: BattleState
 
     def do_action(self, action: MoveAction | SwitchAction) -> None:
+        if PlayerIdentifier.PLAYER == action.actor:
+            nonactor = PlayerIdentifier.OPPONENT
+        elif PlayerIdentifier.OPPONENT == action.actor:
+            nonactor = PlayerIdentifier.PLAYER
+        else:
+            raise Exception("tim robinson: 'what the fuck. WHAT THE FUCK'")
         if isinstance(action, MoveAction):
             pokemon_player_map: dict[PlayerIdentifier, Pokemon] = {
                 PlayerIdentifier.PLAYER: self.trainer_player_side.active_pokemon,
                 PlayerIdentifier.OPPONENT: self.trainer_opponent_side.active_pokemon,
             }
-            if PlayerIdentifier.PLAYER == action.actor:
-                nonactor = PlayerIdentifier.OPPONENT
-            elif PlayerIdentifier.OPPONENT == action.actor:
-                nonactor = PlayerIdentifier.PLAYER
-            else:
-                raise Exception(
-                    f"Fuck off with this unknown inactive actor {action.actor}"
-                )
             active_pokemon = pokemon_player_map[action.actor]
             inactive_pokemon = pokemon_player_map[nonactor]
             move = copy.deepcopy(action.move)
@@ -59,13 +53,12 @@ class Battle(BaseModel):
             )
         elif isinstance(action, SwitchAction):
             if action.actor == PlayerIdentifier.PLAYER:
-                trainer = self.trainer_client_side
+                trainer = self.trainer_player_side
             elif action.actor == PlayerIdentifier.OPPONENT:
-                trainer = self.trainer_opposite_side
+                trainer = self.trainer_opponent_side
             else:
-                raise ValueError(
-                    f"Fuck off with this trainer type: {type(action.actor)}"
-                )
+                raise Exception(f"WHAT THE FUCK unknown actor: '{action.actor}'")
+            # TODO check abilities too
             trainer.switch_pokemon(action.next_index)
             # Todo process on_enter effects of abilities and items
         else:

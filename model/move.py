@@ -1,7 +1,9 @@
+import random
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, PositiveInt
 
+from constants.move_modifier_type import MoveModifierType
 from constants.move_tag import MoveTag
 from constants.types import PokemonType
 from model.battle_state import BattleState
@@ -15,6 +17,7 @@ if TYPE_CHECKING:
 class Move(BaseModel):
     name: str
     type: PokemonType
+    power: int
     tags: list[MoveTag] = []
     accuracy: PositiveInt
     priority: PositiveInt
@@ -28,5 +31,22 @@ class Move(BaseModel):
         pokemon_inactive: "Pokemon",
         battle_state: BattleState,
     ) -> None:
-        # TODO (GG) battle effects
-        pass
+        for modifier in self.modifiers:
+            if modifier.modifier_type == MoveModifierType.ACCURACY:
+                self.accuracy *= modifier.value
+            elif modifier.modifier_type == MoveModifierType.POWER:
+                self.power *= modifier.value
+            else:
+                raise NotImplementedError(
+                    f"Unknown modifier type: {modifier.modifier_type} WHAT THE FUCK"
+                )
+        accuracy_roll = random.randint(1, 100)
+        if self.accuracy < accuracy_roll:
+            return
+        for effect in self.effects:
+            effect.process_effect(
+                pokemon_active=pokemon_active,
+                pokemon_inactive=pokemon_inactive,
+                battle_state=battle_state,
+                move_used__mutable=self,
+            )
