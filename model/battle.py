@@ -39,7 +39,7 @@ class Battle(BaseModel):
                         move_used__mutable=move,
                     )
                 if pokemon.held_item:
-                    for effect in active_pokemon.held_item.ability.before_process_move:
+                    for effect in pokemon.held_item.before_process_move:
                         effect.process_effect(
                             pokemon_active=active_pokemon,
                             pokemon_inactive=inactive_pokemon,

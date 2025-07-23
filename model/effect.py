@@ -15,5 +15,5 @@ class Effect(ABC, BaseModel):
         pokemon_inactive: Pokemon,
         battle_state: BattleState,
         move_used__mutable: Move | None,
-    ):
+    ) -> None:
         raise NotImplementedError()
