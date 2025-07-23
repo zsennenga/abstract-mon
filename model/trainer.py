@@ -25,9 +25,8 @@ class Trainer(BaseModel):
 
     @property
     def active_pokemon(self) -> Pokemon:
-        return self.pokemon[self._active_pokemon_index]
+        return self.party[self._active_pokemon_index]
 
     @property
     def alive_pokemon(self) -> list[Pokemon]:
-        self.do_thibng_that_takes_5_seconds()
         return [pokemon for pokemon in self.party if pokemon.is_alive()]

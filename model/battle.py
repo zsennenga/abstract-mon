@@ -45,7 +45,7 @@ class Battle(BaseModel):
                         move_used__mutable=move,
                     )
                 if pokemon.held_item:
-                    for effect in active_pokemon.held_item.ability.before_process_move:
+                    for effect in pokemon.held_item.before_process_move:
                         effect.process_effect(
                             pokemon_active=active_pokemon,
                             pokemon_inactive=inactive_pokemon,
@@ -59,9 +59,9 @@ class Battle(BaseModel):
             )
         elif isinstance(action, SwitchAction):
             if action.actor == PlayerIdentifier.PLAYER:
-                trainer = self.trainer_client_side
+                trainer = self.trainer_player_side
             elif action.actor == PlayerIdentifier.OPPONENT:
-                trainer = self.trainer_opposite_side
+                trainer = self.trainer_opponent_side
             else:
                 raise ValueError(
                     f"Fuck off with this trainer type: {type(action.actor)}"
