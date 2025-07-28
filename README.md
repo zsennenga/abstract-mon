@@ -4,6 +4,8 @@ A monster battling abstraction
 
 # TODO
 
+- Unscoped: Battle messages
+
 ## Milestone 1
 
 - Ability that does a thing on enter

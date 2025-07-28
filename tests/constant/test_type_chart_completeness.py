@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 import unittest
 
 from constants.type_chart import TYPE_EFFECTIVENESS
