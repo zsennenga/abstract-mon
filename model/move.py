@@ -1,7 +1,7 @@
 import random
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, PositiveInt
+from pydantic import BaseModel
 
 from constants.move_modifier_type import MoveModifierType
 from constants.move_tag import MoveTag
@@ -19,8 +19,8 @@ class Move(BaseModel):
     type: PokemonType
     power: int
     tags: list[MoveTag] = []
-    accuracy: PositiveInt
-    priority: PositiveInt
+    accuracy: float
+    priority: float
     effects: list[Effect]
     modifiers: list[MoveModifier] = []
 
