@@ -17,10 +17,10 @@ if TYPE_CHECKING:
 class Move(BaseModel):
     name: str
     type: PokemonType
-    power: int
+    power: float
     tags: list[MoveTag] = []
     accuracy: float
-    priority: float
+    priority: int
     effects: list[Effect]
     modifiers: list[MoveModifier] = []
 
