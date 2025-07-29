@@ -6,4 +6,4 @@ from model.weather import Weather
 
 class BattleState(BaseModel):
     weather: Weather
-    terrain: Terrain
+    terrain: Terrain | None = None
