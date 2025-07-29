@@ -17,9 +17,9 @@ if TYPE_CHECKING:
 class Move(BaseModel):
     name: str
     type: PokemonType
-    power: float
+    power: float = 0
     tags: list[MoveTag] = []
-    accuracy: float
+    accuracy: float = 100
     priority: int
     effects: list[Effect]
     modifiers: list[MoveModifier] = []
@@ -40,10 +40,10 @@ class Move(BaseModel):
                 raise NotImplementedError(
                     f"Unknown modifier type: {modifier.modifier_type} WHAT THE FUCK"
                 )
-        # test comment to see if it uses the cache
-        accuracy_roll = random.randint(1, 100)
-        if self.accuracy < accuracy_roll:
-            return
+        if 'auto_hit' not in self.tags:
+            accuracy_roll = random.randint(1, 100)
+            if self.accuracy < accuracy_roll:
+                return
         for effect in self.effects:
             effect.process_effect(
                 pokemon_active=pokemon_active,

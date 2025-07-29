@@ -7,6 +7,7 @@ class MoveTag(Enum):
     STATUS = "status"
     CONTACT = "contact"
     AUTO_HIT = "auto_hit"
+    HIGH_CRIT = "high_crit"
 
     ## https://bulbapedia.bulbagarden.net/wiki/Category:Moves_by_usage_method
     BOMB = "bomb"           # Mons with Bulletproof are Immune to these

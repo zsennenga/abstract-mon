@@ -1,7 +1,8 @@
 from pydantic import BaseModel
+from typing import TYPE_CHECKING
 
-from model.effect import Effect
-
+if TYPE_CHECKING:
+    from model.effect import Effect
 
 class Item(BaseModel):
     name: str

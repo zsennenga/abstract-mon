@@ -6,7 +6,7 @@ from model.pokemon import Pokemon
 class Trainer(BaseModel):
     name: str
     party: list[Pokemon]
-    _active_pokemon_index: int
+    _active_pokemon_index: int = 0
 
     def has_remaining_pokemon(self) -> bool:
         return any(self.alive_pokemon)
