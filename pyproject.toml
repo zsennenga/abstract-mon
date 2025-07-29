@@ -48,9 +48,6 @@ warn_unused_configs = true
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = false
-module = [
-  "django_scim"
-]
 
 [tool.pydocstyle]
 inherit = false
@@ -69,7 +66,6 @@ select = [
 ]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "sophium.settings"
 addopts = "-Wignore"
 python_classes = ""
 python_functions = ""
