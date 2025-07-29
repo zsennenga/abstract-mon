@@ -83,3 +83,7 @@ addopts = """
 python_classes = ""
 # disable pytest-specific function discovery
 python_functions = ""
+
+[tool.setuptools.packages.find]
+exclude = ["tests"]
+include = ["*"]
