@@ -2,6 +2,7 @@
 dependencies = [
   "pydantic>=2.11.7"
 ]
+name = "abstract-mon"
 
 [project.optional-dependencies]
 dev = [
