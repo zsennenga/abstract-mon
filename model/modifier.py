@@ -10,7 +10,7 @@ class MoveMagnitudeModifier(BaseModel):
 
 
 class StatModifier(BaseModel):
-    state: Stat
+    stat: Stat
     stages: int
 
 
