@@ -27,3 +27,6 @@ class Pokemon(BaseModel):
 
     def is_alive(self) -> bool:
         return self.current_hp > 0
+
+    def get_stat_stage(self, stat: Stat) -> int:
+        return self.stat_changes.get(stat, 0)
