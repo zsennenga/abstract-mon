@@ -5,5 +5,5 @@ from model.weather import Weather
 
 
 class BattleState(BaseModel):
-    weather: Weather
+    weather: Weather | None = None
     terrain: Terrain | None = None
