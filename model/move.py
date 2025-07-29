@@ -40,6 +40,7 @@ class Move(BaseModel):
                 raise NotImplementedError(
                     f"Unknown modifier type: {modifier.modifier_type} WHAT THE FUCK"
                 )
+        # test comment to see if it uses the cache
         accuracy_roll = random.randint(1, 100)
         if self.accuracy < accuracy_roll:
             return
