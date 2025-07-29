@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from constants.stats import Stat
 from constants.status import NonVolatileStatus, VolatileStatus
 from constants.types import PokemonType
-from model import calculate
+from util import calculate
 from model.ability import Ability
 from model.item import Item
 from model.move import Move
@@ -24,17 +24,41 @@ class Pokemon(BaseModel):
     base_special_attack: int
     base_special_defense: int
     #DERIVED STATS
-    max_hp: int = calculate.base_hp(base_hp)
-    current_hp: int = max_hp
-    attack: int = calculate.true_stat(base_attack)
-    defense: int = calculate.true_stat(base_defense)
-    speed: int = calculate.true_stat(base_speed)
-    special_attack: int = calculate.true_stat(base_special_attack)
-    special_defense: int = calculate.true_stat(base_special_defense)
+    hp_lost: int = 0
+
     #EFFECTS
     stat_changes: dict[Stat, int] | None = None
     non_volatile_status: NonVolatileStatus = NonVolatileStatus.NONE
     volatile_status: list[VolatileStatus] = []
+
+    @property
+    def current_hp(self) -> int:
+        return self.max_hp - self.hp_lost
+
+    @property
+    def max_hp(self) -> int:
+        return calculate.base_hp(self.base_hp)
+
+    @property
+    def attack(self) -> int:
+        return calculate.true_stat(self.base_attack)
+
+    @property
+    def defense(self) -> int:
+        return calculate.true_stat(self.base_defense)
+
+    @property
+    def special_attack(self) -> int:
+        return calculate.true_stat(self.base_special_attack)
+
+    @property
+    def special_defense(self) -> int:
+        return calculate.true_stat(self.base_special_defense)
+
+    @property
+    def speed(self) -> int:
+        return calculate.true_stat(self.base_speed)
+
 
     def is_alive(self) -> bool:
         return self.current_hp > 0

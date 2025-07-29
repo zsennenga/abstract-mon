@@ -42,7 +42,7 @@ def damage_calc(active: Pokemon, target: Pokemon, move: Move) -> int:
     else:
         attack_stat
         temp2 = target.defense
-        damage: float =
+        damage: float = 0
 
     # TODO: clean up this mess
 
