@@ -1,7 +1,7 @@
 import random
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, PositiveInt
+from pydantic import BaseModel
 
 from constants.move_modifier_type import MoveModifierType
 from constants.move_tag import MoveTag
@@ -17,10 +17,10 @@ if TYPE_CHECKING:
 class Move(BaseModel):
     name: str
     type: PokemonType
-    power: int
+    power: float
     tags: list[MoveTag] = []
-    accuracy: PositiveInt
-    priority: PositiveInt
+    accuracy: float
+    priority: int
     effects: list[Effect]
     modifiers: list[MoveModifier] = []
 
@@ -40,6 +40,7 @@ class Move(BaseModel):
                 raise NotImplementedError(
                     f"Unknown modifier type: {modifier.modifier_type} WHAT THE FUCK"
                 )
+        # test comment to see if it uses the cache
         accuracy_roll = random.randint(1, 100)
         if self.accuracy < accuracy_roll:
             return

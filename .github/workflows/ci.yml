@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Cache uv
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+      - name: Install dependencies
+        run: |
+          uv pip install --system mypy black flake8
+          uv pip install --system -e .
+      - name: Run pre-commit checks
+        id: precommit
+        run: |
+          uv pip install --system pre-commit
+          pre-commit run --all-files
+        continue-on-error: true
+      - name: Cache pre-commit
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: precommit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Run mypy (standalone)
+        id: mypy
+        run: mypy .
+        continue-on-error: true
+      - name: Fail if pre-commit or mypy failed
+        if: steps.precommit.outcome == 'failure' || steps.mypy.outcome == 'failure'
+        run: exit 1
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Install dependencies
+        run: |
+          uv pip install --system -e .
+          uv pip install --system pytest
+      - name: Run tests
+        run: pytest
