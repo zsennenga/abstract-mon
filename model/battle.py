@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from constants.player_identifier import PlayerIdentifier
 from model.battle_state import BattleState
 from model.game_action import MoveAction, SwitchAction
+from model.modifier import ModifierContainer
 from model.pokemon import Pokemon
 from model.trainer import Trainer
 
@@ -14,7 +15,9 @@ class Battle(BaseModel):
     trainer_opponent_side: Trainer
     battle_state: BattleState
 
-    def do_action(self, action: MoveAction | SwitchAction) -> None:
+    def do_action(
+        self, action: MoveAction | SwitchAction, modifier_container: ModifierContainer
+    ) -> None:
         if PlayerIdentifier.PLAYER == action.actor:
             nonactor = PlayerIdentifier.OPPONENT
         elif PlayerIdentifier.OPPONENT == action.actor:
@@ -36,7 +39,8 @@ class Battle(BaseModel):
                         pokemon_active=active_pokemon,
                         pokemon_inactive=inactive_pokemon,
                         battle_state=self.battle_state,
-                        move_used__mutable=move,
+                        move=move,
+                        modifier_container=modifier_container,
                     )
                 if pokemon.held_item:
                     for effect in pokemon.held_item.before_process_move:
@@ -44,12 +48,14 @@ class Battle(BaseModel):
                             pokemon_active=active_pokemon,
                             pokemon_inactive=inactive_pokemon,
                             battle_state=self.battle_state,
-                            move_used__mutable=move,
+                            move=move,
+                            modifier_container=modifier_container,
                         )
             move.process_move(
                 pokemon_active=active_pokemon,
                 pokemon_inactive=inactive_pokemon,
                 battle_state=self.battle_state,
+                modifier_container=modifier_container,
             )
         elif isinstance(action, SwitchAction):
             if action.actor == PlayerIdentifier.PLAYER:
