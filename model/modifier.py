@@ -19,9 +19,7 @@ AnyModifier = StatModifier | MoveMagnitudeModifier
 
 class ModifierContainer(BaseModel):
     round_modifier: list[AnyModifier] = []
-    next_round_modifier: list[AnyModifier] = []
     turn_modifier: list[AnyModifier] = []
-    next_turn_modifier: list[AnyModifier] = []
 
     @property
     def current_modifiers(self) -> list[AnyModifier]:

@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 
-from constants.player_identifier import PlayerIdentifier
+from constants.trainer_side_identifier import TrainerSideIdentifier
 from model.move import Move
 
 
 class MoveAction(BaseModel):
-    actor: PlayerIdentifier
+    actor: TrainerSideIdentifier
     move: Move
 
 
 class SwitchAction(BaseModel):
-    actor: PlayerIdentifier
+    actor: TrainerSideIdentifier
     next_index: int
