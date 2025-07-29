@@ -46,8 +46,8 @@ class Move(BaseModel):
             modifier_container.get_move_modifier(MoveModifierType.ACCURACY)
             * ACCURACY_STAGE_MULTIPLIERS[accuracy_stage]
         )
-        accuracy_roll = randint(1, 100) * accuracy_multiplier
-        if self.accuracy < accuracy_roll:
+        accuracy_roll = randint(1, 100)
+        if self.accuracy * accuracy_multiplier < accuracy_roll:
             return
         for effect in self.effects:
             effect.process_effect(
