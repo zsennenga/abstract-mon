@@ -46,9 +46,6 @@ strict_optional = true
 warn_unreachable = true
 warn_unused_configs = true
 
-[[tool.mypy.overrides]]
-ignore_missing_imports = false
-
 [tool.pydocstyle]
 inherit = false
 select = [
