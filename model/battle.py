@@ -14,6 +14,7 @@ class Battle(BaseModel):
     battle_state: BattleState = BattleState()
 
     def run(self) -> None:
+        # TODO if a pokemon doing an action dies gotta skip it.
         while (
             self.trainer_player_side.has_remaining_pokemon()
             and self.trainer_opponent_side.has_remaining_pokemon()
@@ -34,6 +35,11 @@ class Battle(BaseModel):
             # BUT ALSO pursuit means that actions can respond to actions fun
             action_order = [action for action in actions.values()]
             for action in action_order:
+                if (
+                    not self.trainer_opponent_side.has_remaining_pokemon()
+                    or self.trainer_player_side.has_remaining_pokemon()
+                ):
+                    break
                 # TODO this is kinda janky maybe
                 # like how I manage the actor and nonactor
                 # I feel like there's something more elegant here
