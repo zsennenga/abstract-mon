@@ -30,7 +30,7 @@ class ModifierContainer(BaseModel):
     def get_stat_stage(self, stat: Stat) -> int:
         total_stages = 0
         for modifier in self.current_modifiers:
-            if isinstance(modifier, StatModifier) and modifier.state == stat:
+            if isinstance(modifier, StatModifier) and modifier.stat == stat:
                 total_stages += modifier.stages
 
         return total_stages
