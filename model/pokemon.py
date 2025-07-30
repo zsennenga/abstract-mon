@@ -21,7 +21,7 @@ class Pokemon(BaseModel):
     non_volatile_status: NonVolatileStatus
     volatile_status: list[VolatileStatus]
     types: tuple[PokemonType, PokemonType]
-    move: list[Move]
+    moves: list[Move]
     ability: Ability
     held_item: Item | None
 

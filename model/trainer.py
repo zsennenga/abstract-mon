@@ -1,9 +1,15 @@
+import random
+from typing import Literal
+
 from pydantic import BaseModel
 
+from constants.trainer_side_identifier import TrainerSideIdentifier
+from model.game_action import MoveAction, SwitchAction
 from model.pokemon import Pokemon
 
 
 class Trainer(BaseModel):
+    trainer_side_identifier: TrainerSideIdentifier
     name: str
     party: list[Pokemon]
     _active_pokemon_index: int
@@ -30,3 +36,22 @@ class Trainer(BaseModel):
     @property
     def alive_pokemon(self) -> list[Pokemon]:
         return [pokemon for pokemon in self.party if pokemon.is_alive()]
+
+    def choose_action(self) -> MoveAction | SwitchAction:
+        move = random.choice(self.active_pokemon.moves)
+        return MoveAction(
+            actor=self.trainer_side_identifier,
+            move=move,
+        )
+
+
+class PlayerTrainer(Trainer):
+    trainer_side_identifier: Literal[TrainerSideIdentifier.PLAYER] = (
+        TrainerSideIdentifier.PLAYER
+    )
+
+
+class OpponentTrainer(Trainer):
+    trainer_side_identifier: Literal[TrainerSideIdentifier.OPPONENT] = (
+        TrainerSideIdentifier.OPPONENT
+    )

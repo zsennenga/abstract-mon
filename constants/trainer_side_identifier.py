@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class PlayerIdentifier(Enum):
+class TrainerSideIdentifier(Enum):
     PLAYER = "player"
     OPPONENT = "opponent"
