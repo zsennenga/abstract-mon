@@ -8,6 +8,13 @@ from model.nature import Nature
 from util.stat_stage_util import normalize_stage
 
 
+def _min_1(value: int) -> int:
+    # Pokemon stats never go below 1
+    if value < 1:
+        return 1
+    return value
+
+
 class StatContainer(BaseModel):
     level: int
     nature: Nature
@@ -20,13 +27,17 @@ class StatContainer(BaseModel):
     _stat_change_stages: dict[Stat, int]
 
     def _level_stat_value(self, stat: int, nature_multiplier: float) -> int:
-        return math.floor(
-            (math.floor((2 * stat * self.level) / 100) + 5) * nature_multiplier
+        return _min_1(
+            math.floor(
+                (math.floor((2 * stat * self.level) / 100) + 5) * nature_multiplier
+            )
         )
 
     def get_leveled_stat(self, stat: Stat) -> int:
         if stat == Stat.HP:
-            return math.floor((2 * self._base_hp * self.level) / 100) + self.level + 10
+            return _min_1(
+                math.floor((2 * self._base_hp * self.level) / 100) + self.level + 10
+            )
         base_stat_map = {
             Stat.ATTACK: self._base_attack,
             Stat.DEFENSE: self._base_defense,
@@ -45,8 +56,8 @@ class StatContainer(BaseModel):
         if stat == Stat.HP:
             return self.get_leveled_stat(Stat.HP)
         stat_stage = self._stat_change_stages.get(stat, 0)
-        return math.floor(
-            STAT_STAGE_MULTIPLIERS[stat_stage] * self.get_leveled_stat(stat)
+        return _min_1(
+            math.floor(STAT_STAGE_MULTIPLIERS[stat_stage] * self.get_leveled_stat(stat))
         )
 
     def get_stat_stage(self, stat: Stat) -> int:
