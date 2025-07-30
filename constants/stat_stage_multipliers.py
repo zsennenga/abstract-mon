@@ -13,3 +13,19 @@ ACCURACY_STAGE_MULTIPLIERS: dict[int, float] = {
     5: 8 / 3,
     6: 9 / 3,
 }
+
+STAT_STAGE_MULTIPLIERS: dict[int, float] = {
+    -6: 2 / 8,
+    -5: 2 / 7,
+    -4: 2 / 6,
+    -3: 2 / 5,
+    -2: 2 / 4,
+    -1: 2 / 3,
+    0: 1,
+    1: 3 / 2,
+    2: 4 / 2,
+    3: 5 / 2,
+    4: 6 / 2,
+    5: 7 / 2,
+    6: 8 / 2,
+}

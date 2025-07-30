@@ -3,6 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
+from constants.stats import Stat
 from constants.trainer_side_identifier import TrainerSideIdentifier
 from model.game_action import MoveAction, SwitchAction
 from model.pokemon import Pokemon
@@ -42,7 +43,14 @@ class Trainer(BaseModel):
         return MoveAction(
             actor=self.trainer_side_identifier,
             move=move,
+            speed=self.speed,
         )
+
+    @property
+    def speed(self) -> int:
+        if not self.active_pokemon:
+            return 0
+        return self.active_pokemon.get_effective_stat(Stat.SPEED)
 
 
 class PlayerTrainer(Trainer):

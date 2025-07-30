@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 
-from constants.accuracy_stage_multipliers import ACCURACY_STAGE_MULTIPLIERS
 from constants.move_modifier_type import MoveModifierType
 from constants.move_tag import MoveTag
+from constants.stat_stage_multipliers import ACCURACY_STAGE_MULTIPLIERS
 from constants.stats import Stat
 from constants.types import PokemonType
 from model.battle_state import BattleState
