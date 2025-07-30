@@ -21,5 +21,3 @@ class PokemonType(Enum):
     STEEL = "steel"
     FAIRY = "fairy"
     NO_TYPE = "no_type"
-
-

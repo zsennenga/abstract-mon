@@ -9,6 +9,7 @@ from model.pokemon import Pokemon
 if TYPE_CHECKING:
     from model.move import Move
 
+
 class Effect(ABC, BaseModel):
     def process_effect(
         self,

@@ -20,8 +20,8 @@ class Move(BaseModel):
     power: float = 0
     tags: list[MoveTag] = []
     accuracy: float = 100
-    priority: int
-    effects: list[Effect]
+    priority: int = 0
+    effects: list[Effect] = []
     modifiers: list[MoveModifier] = []
 
     def process_move(
@@ -40,7 +40,7 @@ class Move(BaseModel):
                 raise NotImplementedError(
                     f"Unknown modifier type: {modifier.modifier_type} WHAT THE FUCK"
                 )
-        if 'auto_hit' not in self.tags:
+        if MoveTag.AUTO_HIT not in self.tags:
             accuracy_roll = random.randint(1, 100)
             if self.accuracy < accuracy_roll:
                 return
