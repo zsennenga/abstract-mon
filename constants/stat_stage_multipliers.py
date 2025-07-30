@@ -14,6 +14,8 @@ ACCURACY_STAGE_MULTIPLIERS: dict[int, float] = {
     6: 9 / 3,
 }
 
+CRIT_DENOMINATOR = {0: 16, 1: 8, 2: 4, 3: 3, 4: 2, 5: 1}
+
 STAT_STAGE_MULTIPLIERS: dict[int, float] = {
     -6: 2 / 8,
     -5: 2 / 7,

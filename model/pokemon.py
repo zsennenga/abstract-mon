@@ -27,3 +27,6 @@ class Pokemon(BaseModel):
     @property
     def is_alive(self) -> bool:
         return self.current_hp > 0
+
+    def take_damage(self, damage: int) -> None:
+        self.damage_taken += damage
