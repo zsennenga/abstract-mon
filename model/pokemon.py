@@ -35,6 +35,7 @@ class Pokemon(BaseModel):
     def get_stat_stage(self, stat: Stat) -> int:
         return normalize_stage(self.stat_changes.get(stat, 0))
 
+    @property
     def effective_speed(self) -> int:
         return math.floor(
             self.speed * STAT_STAGE_MULTIPLIERS[self.get_stat_stage(Stat.SPEED)]

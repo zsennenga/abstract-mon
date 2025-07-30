@@ -26,4 +26,4 @@ class MoveAction(GameAction):
 class SwitchAction(GameAction):
     actor: TrainerSideIdentifier
     next_index: int
-    action_priority: Literal[0] = 1
+    action_priority: Literal[1] = 1

@@ -1,12 +1,11 @@
 from enum import Enum
-from typing import Self
 
 
 class TrainerSideIdentifier(Enum):
     PLAYER = "player"
     OPPONENT = "opponent"
 
-    def get_opposite(self) -> Self:
+    def get_opposite(self) -> "TrainerSideIdentifier":
         if self == TrainerSideIdentifier.PLAYER:
             return TrainerSideIdentifier.OPPONENT
         elif self == TrainerSideIdentifier.OPPONENT:
