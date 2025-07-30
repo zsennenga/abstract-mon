@@ -37,7 +37,7 @@ class Battle(BaseModel):
             for action in action_order:
                 if (
                     not self.trainer_opponent_side.has_remaining_pokemon()
-                    or self.trainer_player_side.has_remaining_pokemon()
+                    or not self.trainer_player_side.has_remaining_pokemon()
                 ):
                     break
                 # TODO this is kinda janky maybe
