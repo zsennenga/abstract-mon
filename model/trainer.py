@@ -38,7 +38,7 @@ class Trainer(BaseModel):
         return [pokemon for pokemon in self.party if pokemon.is_alive()]
 
     def choose_action(self) -> MoveAction | SwitchAction:
-        move = random.choice(self.active_pokemon.move)
+        move = random.choice(self.active_pokemon.moves)
         return MoveAction(
             actor=self.trainer_side_identifier,
             move=move,
