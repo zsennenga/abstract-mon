@@ -2,7 +2,6 @@ from enum import Enum
 
 
 class MoveTag(Enum):
-    STATUS = "status"
     # https://bulbapedia.bulbagarden.net/wiki/Category:Moves_by_usage_method
     CONTACT = "contact"
     BOMB = "bomb"  # Mons with Bulletproof are Immune to these
