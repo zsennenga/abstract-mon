@@ -1,11 +1,15 @@
+import math
+
 from pydantic import BaseModel
 
+from constants.stat_stage_multipliers import STAT_STAGE_MULTIPLIERS
 from constants.stats import Stat
 from constants.status import NonVolatileStatus, VolatileStatus
 from constants.types import PokemonType
 from model.ability import Ability
 from model.item import Item
 from model.move import Move
+from util.stat_stage_util import normalize_stage
 
 
 class Pokemon(BaseModel):
@@ -29,4 +33,10 @@ class Pokemon(BaseModel):
         return self.current_hp > 0
 
     def get_stat_stage(self, stat: Stat) -> int:
-        return self.stat_changes.get(stat, 0)
+        return normalize_stage(self.stat_changes.get(stat, 0))
+
+    @property
+    def effective_speed(self) -> int:
+        return math.floor(
+            self.speed * STAT_STAGE_MULTIPLIERS[self.get_stat_stage(Stat.SPEED)]
+        )

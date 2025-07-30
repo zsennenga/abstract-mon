@@ -42,7 +42,14 @@ class Trainer(BaseModel):
         return MoveAction(
             actor=self.trainer_side_identifier,
             move=move,
+            speed=self.speed,
         )
+
+    @property
+    def speed(self) -> int:
+        if not self.active_pokemon:
+            return 0
+        return self.active_pokemon.effective_speed
 
 
 class PlayerTrainer(Trainer):
