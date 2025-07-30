@@ -30,6 +30,8 @@ class NatureEnum(Enum):
     SASSY = "Sassy"
     SERIOUS = "Serious"
     TIMID = "Timid"
+    # Not a real nature, but useful for testing
+    SUPER_BORING = "Super Boring"
 
 
 NATURES = {
@@ -177,5 +179,8 @@ NATURES = {
             Stat.ATTACK: 0.9,
             Stat.SPEED: 1.1,
         },
+    ),
+    NatureEnum.SUPER_BORING: Nature(
+        name=NatureEnum.SUPER_BORING.value, stat_modifiers={}
     ),
 }
