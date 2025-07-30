@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from constants.stat_stage_multipliers import STAT_STAGE_MULTIPLIERS
 from constants.stats import Stat
 from model.nature import Nature
+from util.stat_stage_util import normalize_stage
 
 
 class StatContainer(BaseModel):
@@ -43,10 +44,10 @@ class StatContainer(BaseModel):
     def get_modified_stat(self, stat: Stat) -> int:
         if stat == Stat.HP:
             return self.get_leveled_stat(Stat.HP)
-        stat_stage = self._stat_change_stages.get(stat, 1)
+        stat_stage = self._stat_change_stages.get(stat, 0)
         return math.floor(
             STAT_STAGE_MULTIPLIERS[stat_stage] * self.get_leveled_stat(stat)
         )
 
     def get_stat_stage(self, stat: Stat) -> int:
-        return self._stat_change_stages.get(stat, 1)
+        return normalize_stage(self._stat_change_stages.get(stat, 0))
