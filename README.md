@@ -13,8 +13,8 @@ A monster battling abstraction
 - Item that does a thing on turn start
 - Item that boosts a type of move
 - Moves of types that just do damage
-- Can run a basic battle
-- GG can run this
+- Weather that boosts a move type
+- Can run a basic battle end to end
 
 ## Milestone 2
 
