@@ -36,9 +36,9 @@ class Move(BaseModel):
     ) -> None:
         # TODO probably want to construct all normalized stats here upfront...
         accuracy_stage = normalize_stage(
-            pokemon_active.get_stat_stage(Stat.ACCURACY)
+            pokemon_active.stats.get_stat_stage(Stat.ACCURACY)
             + modifier_container.get_stat_stage(Stat.ACCURACY)
-            - pokemon_inactive.get_stat_stage(Stat.EVASION)
+            - pokemon_inactive.stats.get_stat_stage(Stat.EVASION)
             - modifier_container.get_stat_stage(Stat.EVASION)
         )
 
