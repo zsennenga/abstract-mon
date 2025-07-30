@@ -33,7 +33,7 @@ class Battle(BaseModel):
             # this is going to be more or less speed determined, with priority consideration
             # for now, lol just player/opponent
             # BUT ALSO pursuit means that actions can respond to actions fun
-            action_order = [action for action in actions.values()]
+            action_order = list(actions.values())
             for action in action_order:
                 if (
                     not self.trainer_opponent_side.has_remaining_pokemon()
