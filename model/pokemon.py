@@ -24,5 +24,6 @@ class Pokemon(BaseModel):
     def current_hp(self) -> int:
         return self.stats.get_leveled_stat(Stat.HP) - self.damage_taken
 
+    @property
     def is_alive(self) -> bool:
         return self.current_hp > 0

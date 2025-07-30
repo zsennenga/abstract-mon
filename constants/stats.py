@@ -11,3 +11,4 @@ class Stat(Enum):
 
     EVASION = "evasion"
     ACCURACY = "accuracy"
+    CRITICAL = "critical"

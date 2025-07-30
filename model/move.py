@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 
+from constants.move_category import MoveCategory
 from constants.move_modifier_type import MoveModifierType
 from constants.move_tag import MoveTag
 from constants.stat_stage_multipliers import ACCURACY_STAGE_MULTIPLIERS
@@ -20,11 +21,15 @@ if TYPE_CHECKING:
 class Move(BaseModel):
     name: str
     type: PokemonType
-    power: float
+    move_category: MoveCategory
+    attack_stat: Stat
+    defense_stat: Stat
+    power: float = 0
     tags: list[MoveTag] = []
-    accuracy: float
-    priority: int
-    effects: list[Effect]
+    accuracy: float = 100
+    priority: int = 0
+    effects: list[Effect] = []
+    requires_accuracy_roll: bool = True
 
     def process_move(
         self,
@@ -34,21 +39,22 @@ class Move(BaseModel):
         battle_state: BattleState,
         modifier_container: ModifierContainer,
     ) -> None:
-        # TODO probably want to construct all normalized stats here upfront...
-        accuracy_stage = normalize_stage(
-            pokemon_active.stats.get_stat_stage(Stat.ACCURACY)
-            + modifier_container.get_stat_stage(Stat.ACCURACY)
-            - pokemon_inactive.stats.get_stat_stage(Stat.EVASION)
-            - modifier_container.get_stat_stage(Stat.EVASION)
-        )
+        if self.requires_accuracy_roll:
+            # TODO probably want to construct all normalized stats here upfront...
+            accuracy_stage = normalize_stage(
+                pokemon_active.stats.get_stat_stage(Stat.ACCURACY)
+                + modifier_container.get_stat_stage(Stat.ACCURACY)
+                - pokemon_inactive.stats.get_stat_stage(Stat.EVASION)
+                - modifier_container.get_stat_stage(Stat.EVASION)
+            )
 
-        accuracy_multiplier = (
-            modifier_container.get_move_modifier(MoveModifierType.ACCURACY)
-            * ACCURACY_STAGE_MULTIPLIERS[accuracy_stage]
-        )
-        accuracy_roll = randint(1, 100)
-        if self.accuracy * accuracy_multiplier < accuracy_roll:
-            return
+            accuracy_multiplier = (
+                modifier_container.get_move_modifier(MoveModifierType.ACCURACY)
+                * ACCURACY_STAGE_MULTIPLIERS[accuracy_stage]
+            )
+            accuracy_roll = randint(1, 100)
+            if self.accuracy * accuracy_multiplier < accuracy_roll:
+                return
         for effect in self.effects:
             effect.process_effect(
                 pokemon_active=pokemon_active,
