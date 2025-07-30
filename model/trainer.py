@@ -13,7 +13,7 @@ class Trainer(BaseModel):
     trainer_side_identifier: TrainerSideIdentifier
     name: str
     party: list[Pokemon]
-    _active_pokemon_index: int
+    _active_pokemon_index: int = 0
 
     def has_remaining_pokemon(self) -> bool:
         return any(self.alive_pokemon)
@@ -24,7 +24,7 @@ class Trainer(BaseModel):
                 f"Dude holy shit that's not a pokemon at index {new_index} on switch"
             )
         new_pokemon = self.party[new_index]
-        if not new_pokemon.is_alive():
+        if not new_pokemon.is_alive:
             raise Exception(
                 f"Holy shit it's dead what the fuck don't send it out, can't switch {new_index} in"
             )
@@ -36,7 +36,7 @@ class Trainer(BaseModel):
 
     @property
     def alive_pokemon(self) -> list[Pokemon]:
-        return [pokemon for pokemon in self.party if pokemon.is_alive()]
+        return [pokemon for pokemon in self.party if pokemon.is_alive]
 
     def choose_action(self) -> MoveAction | SwitchAction:
         move = random.choice(self.active_pokemon.moves)

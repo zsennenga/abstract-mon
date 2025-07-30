@@ -5,6 +5,7 @@ class NonVolatileStatus(Enum):
     SLEEP = "sleep"
     PARALYZE = "paralyze"
     POISON = "poison"
+    TOXIC = "toxic"
     BURN = "burn"
     FREEZE = "freeze"
 
