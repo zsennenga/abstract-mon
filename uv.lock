@@ -14,29 +14,23 @@ dependencies = [
 dev = [
     { name = "autoflake" },
     { name = "black" },
+    { name = "factory-boy" },
     { name = "flake8" },
     { name = "mypy" },
     { name = "pytest" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "factory-boy" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "autoflake", marker = "extra == 'dev'", specifier = ">=2.3.1" },
     { name = "black", marker = "extra == 'dev'", specifier = ">=25.1.0" },
+    { name = "factory-boy", marker = "extra == 'dev'", specifier = ">=3.3.3" },
     { name = "flake8", marker = "extra == 'dev'", specifier = ">=7.3.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.17.0" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pytest", marker = "extra == 'dev'" },
 ]
 provides-extras = ["dev"]
-
-[package.metadata.requires-dev]
-dev = [{ name = "factory-boy", specifier = ">=3.3.3" }]
 
 [[package]]
 name = "annotated-types"
