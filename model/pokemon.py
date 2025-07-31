@@ -11,10 +11,10 @@ from model.stat_container import StatContainer
 
 class Pokemon(BaseModel):
     name: str
-    damage_taken: int
+    damage_taken: int = 0
     stats: StatContainer
-    non_volatile_status: NonVolatileStatus
-    volatile_status: list[VolatileStatus]
+    non_volatile_status: NonVolatileStatus | None = None
+    volatile_status: list[VolatileStatus] = []
     types: tuple[PokemonType, PokemonType]
     moves: list[Move]
     ability: Ability
@@ -22,7 +22,7 @@ class Pokemon(BaseModel):
 
     @property
     def current_hp(self) -> int:
-        return self.stats.get_leveled_stat(Stat.HP) - self.damage_taken
+        return self.max_hp - self.damage_taken
 
     @property
     def is_alive(self) -> bool:
@@ -30,3 +30,7 @@ class Pokemon(BaseModel):
 
     def take_damage(self, damage: int) -> None:
         self.damage_taken += damage
+
+    @property
+    def max_hp(self) -> int:
+        return self.stats.get_leveled_stat(Stat.HP)

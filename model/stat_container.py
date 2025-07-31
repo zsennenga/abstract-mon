@@ -18,13 +18,13 @@ def _min_1(value: int) -> int:
 class StatContainer(BaseModel):
     level: int
     nature: Nature
-    _base_hp: int
-    _base_attack: int
-    _base_defense: int
-    _base_speed: int
-    _base_special_attack: int
-    _base_special_defense: int
-    _stat_change_stages: dict[Stat, int]
+    base_hp: int
+    base_attack: int
+    base_defense: int
+    base_speed: int
+    base_special_attack: int
+    base_special_defense: int
+    stat_change_stages: dict[Stat, int]
 
     def _level_stat_value(self, stat: int, nature_multiplier: float) -> int:
         return _min_1(
@@ -36,14 +36,14 @@ class StatContainer(BaseModel):
     def get_leveled_stat(self, stat: Stat) -> int:
         if stat == Stat.HP:
             return _min_1(
-                math.floor((2 * self._base_hp * self.level) / 100) + self.level + 10
+                math.floor((2 * self.base_hp * self.level) / 100) + self.level + 10
             )
         base_stat_map = {
-            Stat.ATTACK: self._base_attack,
-            Stat.DEFENSE: self._base_defense,
-            Stat.SPECIAL_DEFENSE: self._base_special_defense,
-            Stat.SPECIAL_ATTACK: self._base_special_attack,
-            Stat.SPEED: self._base_speed,
+            Stat.ATTACK: self.base_attack,
+            Stat.DEFENSE: self.base_defense,
+            Stat.SPECIAL_DEFENSE: self.base_special_defense,
+            Stat.SPECIAL_ATTACK: self.base_special_attack,
+            Stat.SPEED: self.base_speed,
         }
         if stat not in base_stat_map:
             raise ValueError(f"Cannot get leveled stat for {stat}")
@@ -55,10 +55,10 @@ class StatContainer(BaseModel):
     def get_modified_stat(self, stat: Stat) -> int:
         if stat == Stat.HP:
             return self.get_leveled_stat(Stat.HP)
-        stat_stage = self._stat_change_stages.get(stat, 0)
+        stat_stage = self.stat_change_stages.get(stat, 0)
         return _min_1(
             math.floor(STAT_STAGE_MULTIPLIERS[stat_stage] * self.get_leveled_stat(stat))
         )
 
     def get_stat_stage(self, stat: Stat) -> int:
-        return normalize_stage(self._stat_change_stages.get(stat, 0))
+        return normalize_stage(self.stat_change_stages.get(stat, 0))

@@ -11,6 +11,7 @@ from model.modifier import ModifierContainer
 from model.move import Move
 from model.pokemon import Pokemon
 from util.math_util import bound_positive_int
+from util.setting_utils import is_test
 
 
 class DoMoveDamage(Effect):
@@ -33,7 +34,18 @@ class DoMoveDamage(Effect):
         )
         # TODO add damage done modifiers
         pokemon_inactive.take_damage(damage)
+        battle_state.damage_dealt_this_turn += damage
         # TODO after deal damage
+
+    def _crit_random(self, crit_denominator: int) -> int:
+        if is_test():
+            return 0
+        return randint(1, crit_denominator)
+
+    def _damage_roll(self) -> float:
+        if is_test():
+            return 1.0
+        return randint(85, 100) / 100
 
     def _damage_calc(
         self,
@@ -48,7 +60,7 @@ class DoMoveDamage(Effect):
         attack_stat = move.attack_stat
         defense_stat = move.defense_stat
 
-        random_factor: float = randint(85, 100) / 100
+        random_factor: float = self._damage_roll()
 
         stab_modifier = 1.0
         if move.type in active.types:
@@ -63,7 +75,7 @@ class DoMoveDamage(Effect):
         crit_stage = active.stats.get_stat_stage(Stat.CRITICAL)
         crit_denominator = CRIT_DENOMINATOR[crit_stage]
 
-        if randint(1, crit_denominator) == 1:
+        if self._crit_random(crit_denominator) == 1:
             crit_damage_mod = 2
             defense_stat_value = target.stats.get_leveled_stat(defense_stat)
             attack_stat_value = active.stats.get_leveled_stat(attack_stat)

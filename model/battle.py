@@ -34,10 +34,8 @@ class Battle(BaseModel):
                     self.trainer_player_side.choose_action(),
                 ]
             )
-            # technically this isn't strictly correct - player order is purely speed based
-            # but the cases where this makes a difference are minor. If they come up, we fix it.
-            player_order = [action.actor for action in ordered_actions]
             for action in ordered_actions:
+                self.battle_state.damage_dealt_this_turn = 0
                 if (
                     not self.trainer_opponent_side.has_remaining_pokemon()
                     or not self.trainer_player_side.has_remaining_pokemon()
@@ -53,27 +51,6 @@ class Battle(BaseModel):
                     }
                     active_pokemon = pokemon_player_map[actor]
                     inactive_pokemon = pokemon_player_map[nonactor]
-                    pokemon_order = [
-                        pokemon_player_map[player] for player in player_order
-                    ]
-                    for pokemon in pokemon_order:
-                        for effect in pokemon.ability.before_process_move:
-                            effect.process_effect(
-                                pokemon_active=active_pokemon,
-                                pokemon_inactive=inactive_pokemon,
-                                battle_state=self.battle_state,
-                                move=action.move,
-                                modifier_container=modifier_container,
-                            )
-                        if pokemon.held_item:
-                            for effect in pokemon.held_item.before_process_move:
-                                effect.process_effect(
-                                    pokemon_active=active_pokemon,
-                                    pokemon_inactive=inactive_pokemon,
-                                    battle_state=self.battle_state,
-                                    move=action.move,
-                                    modifier_container=modifier_container,
-                                )
                     action.move.process_move(
                         pokemon_active=active_pokemon,
                         pokemon_inactive=inactive_pokemon,
