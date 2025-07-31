@@ -25,8 +25,8 @@ jobs:
           key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
       - name: Install dependencies
         run: |
-          uv pip install --system mypy black flake8
           uv pip install --system -e .
+          uv pip install --system -e .[dev]
       - name: Run pre-commit checks
         id: precommit
         run: |
