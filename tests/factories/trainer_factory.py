@@ -5,7 +5,7 @@ from model.trainer import OpponentTrainer, PlayerTrainer
 from tests.factories.pokemon_factory import PokemonFactory
 
 
-class PlayerTrainerFactory(factory.Factory):
+class PlayerTrainerFactory(factory.Factory[PlayerTrainer]):
     class Meta:
         model = PlayerTrainer
 
@@ -15,7 +15,7 @@ class PlayerTrainerFactory(factory.Factory):
     _active_pokemon_index = 0
 
 
-class OpponentTrainerFactory(factory.Factory):
+class OpponentTrainerFactory(factory.Factory[OpponentTrainer]):
     class Meta:
         model = OpponentTrainer
 

@@ -11,7 +11,7 @@ from tests.factories.item_factory import ItemFactory
 from tests.factories.move_factory import MoveFactory
 
 
-class NatureFactory(factory.Factory):
+class NatureFactory(factory.Factory[Nature]):
     class Meta:
         model = Nature
 
@@ -25,7 +25,7 @@ class NatureFactory(factory.Factory):
     }
 
 
-class StatContainerFactory(factory.Factory):
+class StatContainerFactory(factory.Factory[StatContainer]):
     class Meta:
         model = StatContainer
 
@@ -37,10 +37,10 @@ class StatContainerFactory(factory.Factory):
     _base_speed = 100
     _base_special_attack = 100
     _base_special_defense = 100
-    _stat_change_stages = {}
+    _stat_change_stages: dict[Stat, int] = {}
 
 
-class PokemonFactory(factory.Factory):
+class PokemonFactory(factory.Factory[Pokemon]):
     class Meta:
         model = Pokemon
 
@@ -48,8 +48,8 @@ class PokemonFactory(factory.Factory):
     damage_taken = 0
     stats = factory.SubFactory(StatContainerFactory)
     non_volatile_status = NonVolatileStatus.SLEEP  # First enum value as default
-    volatile_status = []
+    volatile_status: list[str] = []  # Assuming volatile status is a list of strings
     types = (PokemonType.NORMAL, PokemonType.NORMAL)
-    moves = factory.LazyFunction(lambda: [MoveFactory()])
+    moves = factory.List([factory.SubFactory(MoveFactory)])
     ability = factory.SubFactory(AbilityFactory)
     held_item = factory.SubFactory(ItemFactory)

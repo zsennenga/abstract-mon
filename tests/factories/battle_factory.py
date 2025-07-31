@@ -5,7 +5,7 @@ from model.battle_state import BattleState
 from tests.factories.trainer_factory import OpponentTrainerFactory, PlayerTrainerFactory
 
 
-class BattleFactory(factory.Factory):
+class BattleFactory(factory.Factory[Battle]):
     class Meta:
         model = Battle
 

@@ -1,12 +1,14 @@
 import factory
 
 from constants.move_category import MoveCategory
+from constants.move_tag import MoveTag
 from constants.stats import Stat
 from constants.types import PokemonType
+from model.effect import Effect
 from model.move import Move
 
 
-class MoveFactory(factory.Factory):
+class MoveFactory(factory.Factory[Move]):
     class Meta:
         model = Move
 
@@ -16,8 +18,8 @@ class MoveFactory(factory.Factory):
     attack_stat = Stat.ATTACK
     defense_stat = Stat.DEFENSE
     power = 50
-    tags = []
+    tags: list[MoveTag] = []
     accuracy = 100
     priority = 0
-    effects = []
+    effects: list[Effect] = []
     requires_accuracy_roll = False  # Move should not miss
