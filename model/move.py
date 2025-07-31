@@ -1,4 +1,3 @@
-import sys
 from random import randint
 from typing import TYPE_CHECKING
 
@@ -36,7 +35,7 @@ class Move(BaseModel):
 
     def _accuracy_roll(self) -> int:
         if is_test():
-            return sys.maxsize
+            return 0
         return randint(1, 100)
 
     def _accuracy_roll_passes(

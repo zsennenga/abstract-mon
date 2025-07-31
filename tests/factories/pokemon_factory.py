@@ -15,7 +15,7 @@ class NatureFactory(factory.Factory[Nature]):
     class Meta:
         model = Nature
 
-    name = "Hardy"
+    name = "Boring"
     stat_modifiers = {
         Stat.ATTACK: 1.0,
         Stat.DEFENSE: 1.0,

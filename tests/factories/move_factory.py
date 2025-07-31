@@ -23,4 +23,4 @@ class MoveFactory(factory.Factory[Move]):
     accuracy = 100
     priority = 0
     effects: list[Effect] = [DoMoveDamage()]
-    requires_accuracy_roll = False  # Move should not miss
+    requires_accuracy_roll = True

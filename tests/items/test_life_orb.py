@@ -10,6 +10,7 @@ from util.math_util import bound_positive_int
 class TestLifeOrb(unittest.TestCase):
     def test_basic_life_orb(self) -> None:
         battle = BattleFactory.create()
+        # Step 1: Check how a "normal" attack goes
         trainer_pokemon = battle.trainer_player_side.active_pokemon
         opponent_pokemon = battle.trainer_opponent_side.active_pokemon
         move = trainer_pokemon.moves[0]
@@ -23,6 +24,7 @@ class TestLifeOrb(unittest.TestCase):
         )
         self.assertEqual(trainer_pokemon.damage_taken, 0)
         base_damage_dealt = opponent_pokemon.damage_taken
+        # Step 2: Switch to life orb
         trainer_pokemon.held_item = LifeOrb()
         move.process_move(
             pokemon_active=trainer_pokemon,
@@ -30,6 +32,7 @@ class TestLifeOrb(unittest.TestCase):
             battle_state=BattleState(),
             modifier_container=ModifierContainer(),
         )
+        # Step 3: Check that the effects actually happened
         self.assertEqual(
             opponent_pokemon.damage_taken,
             bound_positive_int(base_damage_dealt + 1.3 * base_damage_dealt),
