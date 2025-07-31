@@ -11,10 +11,10 @@ from model.stat_container import StatContainer
 
 class Pokemon(BaseModel):
     name: str
-    damage_taken: int
+    damage_taken: int = 0
     stats: StatContainer
-    non_volatile_status: NonVolatileStatus
-    volatile_status: list[VolatileStatus]
+    non_volatile_status: NonVolatileStatus | None = None
+    volatile_status: list[VolatileStatus] = []
     types: tuple[PokemonType, PokemonType]
     moves: list[Move]
     ability: Ability
