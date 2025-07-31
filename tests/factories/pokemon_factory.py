@@ -1,7 +1,6 @@
 import factory
 
 from constants.stats import Stat
-from constants.status import NonVolatileStatus
 from constants.types import PokemonType
 from model.nature import Nature
 from model.pokemon import Pokemon
@@ -47,7 +46,7 @@ class PokemonFactory(factory.Factory[Pokemon]):
     name = "Basic Pokemon"
     damage_taken = 0
     stats = factory.SubFactory(StatContainerFactory)
-    non_volatile_status = NonVolatileStatus.SLEEP  # First enum value as default
+    non_volatile_status = None
     volatile_status: list[str] = []  # Assuming volatile status is a list of strings
     types = (PokemonType.NORMAL, PokemonType.NORMAL)
     moves = factory.List([factory.SubFactory(MoveFactory)])
