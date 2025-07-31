@@ -22,7 +22,7 @@ class Pokemon(BaseModel):
 
     @property
     def current_hp(self) -> int:
-        return self.stats.get_leveled_stat(Stat.HP) - self.damage_taken
+        return self.max_hp - self.damage_taken
 
     @property
     def is_alive(self) -> bool:
@@ -30,3 +30,7 @@ class Pokemon(BaseModel):
 
     def take_damage(self, damage: int) -> None:
         self.damage_taken += damage
+
+    @property
+    def max_hp(self) -> int:
+        return self.stats.get_leveled_stat(Stat.HP)
