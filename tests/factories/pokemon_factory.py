@@ -31,13 +31,13 @@ class StatContainerFactory(factory.Factory[StatContainer]):
 
     level = 100
     nature = factory.SubFactory(NatureFactory)
-    _base_hp = 100
-    _base_attack = 100
-    _base_defense = 100
-    _base_speed = 100
-    _base_special_attack = 100
-    _base_special_defense = 100
-    _stat_change_stages: dict[Stat, int] = {}
+    base_hp = 100
+    base_attack = 100
+    base_defense = 100
+    base_speed = 100
+    base_special_attack = 100
+    base_special_defense = 100
+    stat_change_stages: dict[Stat, int] = {}
 
 
 class PokemonFactory(factory.Factory[Pokemon]):

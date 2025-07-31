@@ -5,6 +5,7 @@ from constants.move_tag import MoveTag
 from constants.stats import Stat
 from constants.types import PokemonType
 from model.effect import Effect
+from model.effects.do_damage import DoMoveDamage
 from model.move import Move
 
 
@@ -21,5 +22,5 @@ class MoveFactory(factory.Factory[Move]):
     tags: list[MoveTag] = []
     accuracy = 100
     priority = 0
-    effects: list[Effect] = []
+    effects: list[Effect] = [DoMoveDamage()]
     requires_accuracy_roll = False  # Move should not miss

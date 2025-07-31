@@ -1,3 +1,4 @@
+import sys
 from random import randint
 from typing import TYPE_CHECKING
 
@@ -12,6 +13,8 @@ from constants.types import PokemonType
 from model.battle_state import BattleState
 from model.effect import Effect
 from model.modifier import ModifierContainer
+from util.math_util import bound_positive_int
+from util.setting_utils import is_test
 from util.stat_stage_util import normalize_stage
 
 if TYPE_CHECKING:
@@ -30,6 +33,11 @@ class Move(BaseModel):
     priority: int = 0
     effects: list[Effect] = []
     requires_accuracy_roll: bool = True
+
+    def _accuracy_roll(self) -> int:
+        if is_test():
+            return sys.maxsize
+        return randint(1, 100)
 
     def _accuracy_roll_passes(
         self,
@@ -50,8 +58,8 @@ class Move(BaseModel):
             modifier_container.get_move_modifier(MoveModifierType.ACCURACY)
             * ACCURACY_STAGE_MULTIPLIERS[accuracy_stage]
         )
-        accuracy_roll = randint(1, 100)
-        if self.accuracy * accuracy_multiplier < accuracy_roll:
+        accuracy_roll = self._accuracy_roll()
+        if bound_positive_int(self.accuracy * accuracy_multiplier) < accuracy_roll:
             return False
         return True
 
@@ -63,6 +71,28 @@ class Move(BaseModel):
         battle_state: BattleState,
         modifier_container: ModifierContainer,
     ) -> None:
+        pokemon_order = [
+            pokemon_active,
+            pokemon_inactive,
+        ]
+        for pokemon in pokemon_order:
+            for effect in pokemon.ability.before_process_move:
+                effect.process_effect(
+                    pokemon_active=pokemon_active,
+                    pokemon_inactive=pokemon_inactive,
+                    battle_state=battle_state,
+                    move=self,
+                    modifier_container=modifier_container,
+                )
+            if pokemon.held_item:
+                for effect in pokemon.held_item.before_process_move:
+                    effect.process_effect(
+                        pokemon_active=pokemon_active,
+                        pokemon_inactive=pokemon_inactive,
+                        battle_state=battle_state,
+                        move=self,
+                        modifier_container=modifier_container,
+                    )
         if self.requires_accuracy_roll and not self._accuracy_roll_passes(
             pokemon_active=pokemon_active,
             pokemon_inactive=pokemon_inactive,
@@ -78,6 +108,18 @@ class Move(BaseModel):
                 move=self,
                 modifier_container=modifier_container,
             )
+        if battle_state.damage_dealt_this_turn > 0:
+            for pokemon in pokemon_order:
+                if not pokemon.held_item:
+                    continue
+                for effect in pokemon.held_item.after_damage_dealing_move:
+                    effect.process_effect(
+                        pokemon_active=pokemon_active,
+                        pokemon_inactive=pokemon_inactive,
+                        battle_state=battle_state,
+                        move=self,
+                        modifier_container=modifier_container,
+                    )
 
     # Moves cannot be changed
     model_config = ConfigDict(frozen=True)
