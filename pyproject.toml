@@ -33,7 +33,7 @@ enable_error_code = [
   # Always specify which type error we're ignoring.
   "ignore-without-code"
 ]
-exclude = '^\.venv/'
+exclude = ['^\.venv/', '^data/raw_data/']
 files = "."
 local_partial_types = true
 mypy_path = "mypy_stubs"

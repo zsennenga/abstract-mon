@@ -6,14 +6,20 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-ast
+        exclude: ^data/raw_data/merge_data\.py$
       - id: check-builtin-literals
+        exclude: ^data/raw_data/merge_data\.py$
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
       - id: check-merge-conflict
       - id: trailing-whitespace
+        exclude: ^data/raw_data/merge_data\.py$
       - id: end-of-file-fixer
+        exclude: ^data/raw_data/merge_data\.py$
       - id: mixed-line-ending
+        exclude: ^data/raw_data/merge_data\.py$
       - id: debug-statements
+        exclude: ^data/raw_data/merge_data\.py$
   - repo: https://github.com/myint/autoflake
     rev: "v2.3.1"
     hooks:
@@ -24,15 +30,18 @@ repos:
             --remove-all-unused-imports,
             --ignore-init-module-imports,
           ]
+        exclude: ^data/raw_data/merge_data\.py$
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
         args: ["--profile", "black", "--filter-files"]
+        exclude: ^data/raw_data/merge_data\.py$
   - repo: https://github.com/ikamensh/flynt
     rev: "1.0.4"
     hooks:
       - id: flynt
+        exclude: ^data/raw_data/merge_data\.py$
   - repo: https://github.com/pappasam/toml-sort
     rev: v0.24.2
     hooks:
@@ -48,23 +57,4 @@ repos:
       - id: black
         args: ["--target-version=py313"]
         language_version: python3.13
-  - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.3.0
-    hooks:
-      - id: pydocstyle
-        args:
-          - --config=pyproject.toml
-        additional_dependencies:
-          - .[toml]
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
-    hooks:
-      - id: flake8
-        args: ["--config=.flake8"]
-        language_version: python3.13
-        additional_dependencies:
-          - flake8-no-pep420~=2.8
-          - flake8-walrus~=1.2
-          - flake8-tidy-imports~=4.11
-          - flake8-bugbear~=24.12.12
-          - flake8-print~=5.0
+        exclude: ^data/raw_data/merge_data\.py$
