@@ -25,7 +25,7 @@ class ChanceEffect(Effect):
     inner_effect: Effect
 
     def _chance_roll(self) -> int:
-        """Return a random number between 1-100 for chance calculation."""
+        """Return a random number between 1 and 100 (inclusive) for chance calculation."""
         if is_test():
             # In TEST_MODE return the maximum value so the effect does NOT
             # trigger unless tests explicitly override this helper via mocking,
