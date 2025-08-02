@@ -34,13 +34,22 @@ class TestChanceEffect(unittest.TestCase):
         effect = ChanceEffect(chance=10, inner_effect=self.status_effect)
         self.assertEqual(effect.chance, 10)
         self.assertEqual(effect.inner_effect, self.status_effect)
-        self.assertEqual(effect.inner_effect.status_condition, NonVolatileStatus.BURN)
+        # Cast so mypy understands we are accessing an InflictStatus instance
+        from typing import cast
+
+        self.assertEqual(
+            cast(InflictStatus, effect.inner_effect).status_condition,
+            NonVolatileStatus.BURN,
+        )
 
         # Create with real stat effect
         effect = ChanceEffect(chance=20, inner_effect=self.stat_effect)
         self.assertEqual(effect.chance, 20)
         self.assertEqual(effect.inner_effect, self.stat_effect)
-        self.assertEqual(effect.inner_effect.stat, Stat.ATTACK)
+        self.assertEqual(
+            cast(ModifyStatStage, effect.inner_effect).stat,
+            Stat.ATTACK,
+        )
 
     def test_effect_not_applied_in_test_mode_by_default(self) -> None:
         """Test that inner effect is not processed in TEST_MODE by default."""
@@ -62,7 +71,9 @@ class TestChanceEffect(unittest.TestCase):
         self.assertIsNone(self.target.non_volatile_status)
 
     @patch("model.effects.chance_effect.ChanceEffect._chance_roll", return_value=1)
-    def test_status_effect_applied_when_chance_succeeds(self, mock_chance_roll) -> None:
+    def test_status_effect_applied_when_chance_succeeds(
+        self, _mock_chance_roll: object
+    ) -> None:
         """Test that status effect is processed when chance roll succeeds."""
         # Ensure target has no status initially
         self.target.non_volatile_status = None
@@ -82,7 +93,9 @@ class TestChanceEffect(unittest.TestCase):
         self.assertEqual(self.target.non_volatile_status, NonVolatileStatus.BURN)
 
     @patch("model.effects.chance_effect.ChanceEffect._chance_roll", return_value=1)
-    def test_stat_effect_applied_when_chance_succeeds(self, mock_chance_roll) -> None:
+    def test_stat_effect_applied_when_chance_succeeds(
+        self, _mock_chance_roll: object
+    ) -> None:
         """Test that stat effect is processed when chance roll succeeds."""
         # Set initial stat stage
         initial_stage = 0

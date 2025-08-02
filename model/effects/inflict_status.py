@@ -27,7 +27,7 @@ class InflictStatus(Effect):
         pokemon_active: "Pokemon",
         pokemon_inactive: "Pokemon",
         battle_state: "BattleState",
-        move: "Move" = None,
+        move: "Move | None" = None,
         modifier_container: "ModifierContainer",
     ) -> None:
         """
