@@ -3,6 +3,7 @@ from .poison_fang import PoisonFang
 from .pound import Pound
 from .quick_attack import QuickAttack
 from .shadow_ball import ShadowBall
+from .surf import Surf
 from .thunder_punch import ThunderPunch
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "ThunderPunch",
     "ShadowBall",
     "PoisonFang",
+    "Surf",
 ]

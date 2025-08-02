@@ -8,4 +8,5 @@ This module contains tests for the concrete move implementations including:
 - Thunder Punch
 - Shadow Ball
 - Poison Fang
+- Surf
 """

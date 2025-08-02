@@ -49,7 +49,7 @@ class PokemonFactory(factory.Factory[Pokemon]):
     stats = factory.SubFactory(StatContainerFactory)
     non_volatile_status: NonVolatileStatus | None = None
     volatile_status: list[str] = []  # Assuming volatile status is a list of strings
-    types = (PokemonType.NORMAL, PokemonType.NO_TYPE)
+    types = (PokemonType.NO_TYPE, PokemonType.NO_TYPE)
     moves = factory.List([factory.SubFactory(MoveFactory)])
     ability = factory.SubFactory(AbilityFactory)
     held_item = factory.SubFactory(ItemFactory)

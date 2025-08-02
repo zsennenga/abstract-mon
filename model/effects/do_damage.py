@@ -93,9 +93,10 @@ class DoMoveDamage(Effect):
 
         effective_power = bound_positive_int(move.power * move_power_modifier)
 
-        base_damage = (50 * attack_stat_value * effective_power) / (
-            22 * defense_stat_value
-        )
+        base_damage = (
+            (42 * attack_stat_value * effective_power) / (50 * defense_stat_value)
+        ) + 2
+
         damage = (
             base_damage
             * crit_damage_mod

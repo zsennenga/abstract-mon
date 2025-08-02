@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from constants.types import PokemonType
 from model.battle_state import BattleState
@@ -15,10 +16,10 @@ class TestPound(unittest.TestCase):
 
         # Create a standard attacker and target
         self.attacker = PokemonFactory.create(
-            types=(PokemonType.NORMAL, PokemonType.NORMAL), non_volatile_status=None
+            types=(PokemonType.NO_TYPE, PokemonType.NO_TYPE), non_volatile_status=None
         )
         self.target = PokemonFactory.create(
-            types=(PokemonType.NORMAL, PokemonType.NORMAL), non_volatile_status=None
+            types=(PokemonType.NO_TYPE, PokemonType.NO_TYPE), non_volatile_status=None
         )
 
         # Reset damage counters
@@ -43,16 +44,22 @@ class TestPound(unittest.TestCase):
             self.battle_state.damage_dealt_this_turn, self.target.damage_taken
         )
 
-    def test_stab_bonus(self) -> None:
+    @patch("model.effects.do_damage.DoMoveDamage._crit_random", return_value=0)
+    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
+    def test_stab_bonus(
+        self, _mock_crit_roll: object, _mock_random_factor: object
+    ) -> None:
         """Test that STAB (Same Type Attack Bonus) is correctly applied."""
         # Normal attacker (STAB)
+        self.attacker.types = (PokemonType.NORMAL, PokemonType.NORMAL)
+
         self.move.process_move(
             pokemon_active=self.attacker,
             pokemon_inactive=self.target,
             battle_state=self.battle_state,
             modifier_container=self.modifier_container,
         )
-        normal_damage = self.battle_state.damage_dealt_this_turn
+        stab_damage = self.battle_state.damage_dealt_this_turn
 
         # Reset and use a different type attacker (no STAB)
         self.battle_state.damage_dealt_this_turn = 0
@@ -69,4 +76,4 @@ class TestPound(unittest.TestCase):
         non_stab_damage = self.battle_state.damage_dealt_this_turn
 
         # STAB should be 1.5x damage
-        self.assertAlmostEqual(normal_damage / non_stab_damage, 1.5, places=1)
+        self.assertAlmostEqual(stab_damage / non_stab_damage, 1.5, places=1)

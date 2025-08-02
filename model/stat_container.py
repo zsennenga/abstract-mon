@@ -29,14 +29,17 @@ class StatContainer(BaseModel):
     def _level_stat_value(self, stat: int, nature_multiplier: float) -> int:
         return _min_1(
             math.floor(
-                (math.floor((2 * stat * self.level) / 100) + 5) * nature_multiplier
+                (math.floor((((2 * stat) + 31) * self.level) / 100) + 5)
+                * nature_multiplier
             )
         )
 
     def get_leveled_stat(self, stat: Stat) -> int:
         if stat == Stat.HP:
             return _min_1(
-                math.floor((2 * self.base_hp * self.level) / 100) + self.level + 10
+                math.floor((((2 * self.base_hp) + 31) * self.level) / 100)
+                + self.level
+                + 10
             )
         base_stat_map = {
             Stat.ATTACK: self.base_attack,

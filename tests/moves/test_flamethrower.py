@@ -82,7 +82,9 @@ class TestFlamethrower(unittest.TestCase):
         # TEST_MODE which is greater than the move's 10 % burn chance.
         self.assertIsNone(self.target.non_volatile_status)
 
-    def test_type_effectiveness(self) -> None:
+    @patch("model.effects.do_damage.DoMoveDamage._crit_random", return_value=0)
+    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
+    def test_type_effectiveness(self, _mock_crit: object, _mock_random: object) -> None:
         """Test Flamethrower type effectiveness against different types."""
         # Reset
         self.battle_state.damage_dealt_this_turn = 0
