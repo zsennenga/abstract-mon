@@ -132,6 +132,7 @@ def main():
                 "name": name_data["name"],
                 "power": move["power"] if move["power"] else None,
                 "accuracy": move["accuracy"] if move["accuracy"] else None,
+                "priority": int(move["priority"]) if move["priority"] else 0,
                 "effect_chance": (
                     move["effect_chance"] if move["effect_chance"] else None
                 ),
