@@ -3,7 +3,9 @@ from constants.stats import Stat
 from constants.status import NonVolatileStatus
 from constants.types import PokemonType
 from model.effect import Effect  # Needed for correct effects typing
-from model.effects import DoMoveDamage, InflictStatus
+from model.effects.chance_effect import ChanceEffect
+from model.effects.do_damage import DoMoveDamage
+from model.effects.inflict_status import InflictStatus
 from model.move import Move
 
 
@@ -30,8 +32,10 @@ class PoisonFang(Move):
     # Effects executed when the move processes
     effects: list[Effect] = [
         DoMoveDamage(),
-        InflictStatus(
-            status_condition=NonVolatileStatus.TOXIC,
+        ChanceEffect(
             chance=50,
+            inner_effect=InflictStatus(
+                status_condition=NonVolatileStatus.TOXIC,
+            ),
         ),
     ]

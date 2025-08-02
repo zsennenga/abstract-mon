@@ -32,7 +32,7 @@ class TestShadowBall(unittest.TestCase):
         self.move = ShadowBall()
 
     @patch(
-        "model.effects.modify_stat_stage.ModifyStatStage._chance_roll",
+        "model.effects.chance_effect.ChanceEffect._chance_roll",
         return_value=1,
     )
     def test_stat_reduction(self, _mock_chance_roll: object) -> None:

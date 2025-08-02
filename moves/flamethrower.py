@@ -2,8 +2,13 @@ from constants.move_category import MoveCategory
 from constants.stats import Stat
 from constants.status import NonVolatileStatus
 from constants.types import PokemonType
+
+# Effect imports pulled directly from their modules to avoid relying on an empty
+# model.effects.__init__.
 from model.effect import Effect  # Needed for effects field type annotation
-from model.effects import DoMoveDamage, InflictStatus
+from model.effects.chance_effect import ChanceEffect
+from model.effects.do_damage import DoMoveDamage
+from model.effects.inflict_status import InflictStatus
 from model.move import Move
 
 
@@ -29,5 +34,10 @@ class Flamethrower(Move):
     # List of effects executed when the move is processed
     effects: list[Effect] = [
         DoMoveDamage(),
-        InflictStatus(status_condition=NonVolatileStatus.BURN, chance=10),
+        ChanceEffect(
+            chance=10,
+            inner_effect=InflictStatus(
+                status_condition=NonVolatileStatus.BURN,
+            ),
+        ),
     ]

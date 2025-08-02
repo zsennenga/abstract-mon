@@ -3,7 +3,12 @@ from constants.stats import Stat
 from constants.status import NonVolatileStatus
 from constants.types import PokemonType
 from model.effect import Effect
-from model.effects import DoMoveDamage, InflictStatus
+
+# Import concrete effect classes directly from their modules to avoid relying
+# on aggregated exports in ``model.effects``.
+from model.effects.chance_effect import ChanceEffect
+from model.effects.do_damage import DoMoveDamage
+from model.effects.inflict_status import InflictStatus
 from model.move import Move
 
 
@@ -30,5 +35,10 @@ class ThunderPunch(Move):
     # Effects executed when the move processes
     effects: list[Effect] = [
         DoMoveDamage(),
-        InflictStatus(status_condition=NonVolatileStatus.PARALYZE, chance=10),
+        ChanceEffect(
+            chance=10,
+            inner_effect=InflictStatus(
+                status_condition=NonVolatileStatus.PARALYZE,
+            ),
+        ),
     ]

@@ -1,9 +1,7 @@
-from random import randint
 from typing import TYPE_CHECKING
 
 from constants.status import NonVolatileStatus
 from model.effect import Effect
-from util.setting_utils import is_test
 
 if TYPE_CHECKING:
     from model.battle_state import BattleState
@@ -14,22 +12,14 @@ if TYPE_CHECKING:
 
 class InflictStatus(Effect):
     """
-    Effect that inflicts a non-volatile status condition on the target Pokemon with a specified chance.
+    Effect that inflicts a non-volatile status condition on the target Pokemon.
+
+    This is a simplified version without chance handling logic,
+    meant to be used with ChanceEffect for probability handling.
     """
 
-    # Pydantic fields – pydantic will auto-generate the __init__
+    # Pydantic field – pydantic will auto-generate the __init__
     status_condition: NonVolatileStatus
-    chance: float
-
-    def _chance_roll(self) -> int:
-        """Return a random number between 1-100 for chance calculation."""
-        if is_test():
-            # In TEST_MODE we return the _maximum_ value so that status
-            # application only occurs when explicitly mocked.  This mirrors the
-            # behaviour of other random helpers (e.g., critical-hit rolls) that
-            # never trigger in tests unless overridden.
-            return 100
-        return randint(1, 100)
 
     def process_effect(
         self,
@@ -54,6 +44,5 @@ class InflictStatus(Effect):
         if pokemon_inactive.non_volatile_status is not None:
             return
 
-        # Check if the effect triggers based on chance
-        if self._chance_roll() <= self.chance:
-            pokemon_inactive.non_volatile_status = self.status_condition
+        # Apply the status (no chance check - handled by ChanceEffect if needed)
+        pokemon_inactive.non_volatile_status = self.status_condition

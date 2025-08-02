@@ -2,7 +2,12 @@ from constants.move_category import MoveCategory
 from constants.stats import Stat
 from constants.types import PokemonType
 from model.effect import Effect
-from model.effects import DoMoveDamage, ModifyStatStage
+
+# Import concrete effect classes directly from their modules to avoid relying
+# on aggregated exports in ``model.effects`` (which is now intentionally empty).
+from model.effects.chance_effect import ChanceEffect
+from model.effects.do_damage import DoMoveDamage
+from model.effects.modify_stat_stage import ModifyStatStage
 from model.move import Move
 
 
@@ -29,10 +34,12 @@ class ShadowBall(Move):
     # --- Executed effects ---
     effects: list[Effect] = [
         DoMoveDamage(),
-        ModifyStatStage(
-            stat=Stat.SPECIAL_DEFENSE,
-            stage_change=-1,
-            target="opponent",
+        ChanceEffect(
             chance=20,
+            inner_effect=ModifyStatStage(
+                stat=Stat.SPECIAL_DEFENSE,
+                stage_change=-1,
+                target="opponent",
+            ),
         ),
     ]

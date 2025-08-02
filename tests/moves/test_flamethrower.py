@@ -29,7 +29,7 @@ class TestFlamethrower(unittest.TestCase):
         # Initialize the move
         self.move = Flamethrower()
 
-    @patch("model.effects.inflict_status.InflictStatus._chance_roll", return_value=1)
+    @patch("model.effects.chance_effect.ChanceEffect._chance_roll", return_value=1)
     def test_burn_effect_success(self, _mock_chance_roll: object) -> None:
         """Test Flamethrower's burn effect (success case)."""
         self.move.process_move(

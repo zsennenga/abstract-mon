@@ -2,7 +2,7 @@ from constants.move_category import MoveCategory
 from constants.stats import Stat
 from constants.types import PokemonType
 from model.effect import Effect
-from model.effects import DoMoveDamage
+from model.effects.do_damage import DoMoveDamage
 from model.move import Move
 
 

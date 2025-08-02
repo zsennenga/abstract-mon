@@ -29,7 +29,7 @@ class TestPoisonFang(unittest.TestCase):
         # Initialize the move
         self.move = PoisonFang()
 
-    @patch("model.effects.inflict_status.InflictStatus._chance_roll", return_value=1)
+    @patch("model.effects.chance_effect.ChanceEffect._chance_roll", return_value=1)
     def test_toxic_effect_applied(self, _mock_chance_roll: object) -> None:
         """Poison Fang should deal damage and badly poison the target in TEST_MODE."""
         self.move.process_move(

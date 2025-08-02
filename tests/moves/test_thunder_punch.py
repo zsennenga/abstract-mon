@@ -29,7 +29,7 @@ class TestThunderPunch(unittest.TestCase):
         # Initialize the move
         self.move = ThunderPunch()
 
-    @patch("model.effects.inflict_status.InflictStatus._chance_roll", return_value=1)
+    @patch("model.effects.chance_effect.ChanceEffect._chance_roll", return_value=1)
     def test_paralyze_effect(self, _mock_chance_roll: object) -> None:
         """Thunder Punch should deal damage and always paralyze in TEST_MODE."""
         self.move.process_move(
