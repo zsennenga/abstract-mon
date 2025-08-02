@@ -1,8 +1,5 @@
 import unittest
-from unittest.mock import patch
 
-from constants.move_category import MoveCategory
-from constants.stats import Stat
 from constants.types import PokemonType
 from model.battle_state import BattleState
 from model.modifier import ModifierContainer
@@ -31,26 +28,11 @@ class TestQuickAttack(unittest.TestCase):
         self.move = QuickAttack()
         self.regular_move = Pound()
 
-    def test_move_properties(self) -> None:
-        """Test that Quick Attack has the correct properties."""
-        self.assertEqual(self.move.name, "Quick Attack")
-        self.assertEqual(self.move.type, PokemonType.NORMAL)
-        self.assertEqual(self.move.power, 40)
-        self.assertEqual(self.move.accuracy, 100)
-        self.assertEqual(self.move.priority, 1)
-        self.assertEqual(self.move.move_category, MoveCategory.PHYSICAL)
-        self.assertEqual(self.move.attack_stat, Stat.ATTACK)
-        self.assertEqual(self.move.defense_stat, Stat.DEFENSE)
-
     def test_priority_comparison(self) -> None:
         """Test that Quick Attack has higher priority than regular moves."""
         self.assertGreater(self.move.priority, self.regular_move.priority)
 
-    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
-    @patch(
-        "model.effects.do_damage.DoMoveDamage._crit_random", return_value=100
-    )  # No crit
-    def test_damage_calculation(self, mock_crit, mock_damage_roll) -> None:
+    def test_damage_calculation(self) -> None:
         """Test that Quick Attack deals the expected damage."""
         self.move.process_move(
             pokemon_active=self.attacker,

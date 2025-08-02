@@ -24,7 +24,11 @@ class InflictStatus(Effect):
     def _chance_roll(self) -> int:
         """Return a random number between 1-100 for chance calculation."""
         if is_test():
-            return 1  # Always succeed in tests
+            # In TEST_MODE we return the _maximum_ value so that status
+            # application only occurs when explicitly mocked.  This mirrors the
+            # behaviour of other random helpers (e.g., critical-hit rolls) that
+            # never trigger in tests unless overridden.
+            return 100
         return randint(1, 100)
 
     def process_effect(

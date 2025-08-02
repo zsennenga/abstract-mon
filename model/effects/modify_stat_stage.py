@@ -26,7 +26,10 @@ class ModifyStatStage(Effect):
     def _chance_roll(self) -> int:
         """Return a random number between 1-100 for chance calculation."""
         if is_test():
-            return 1  # Always succeed in tests
+            # In TEST_MODE return the maximum value so the effect does NOT
+            # trigger unless tests explicitly override this helper via mocking,
+            # keeping behaviour consistent with other random helpers.
+            return 100
         return randint(1, 100)
 
     def process_effect(

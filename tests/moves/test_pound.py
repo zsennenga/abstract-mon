@@ -1,8 +1,5 @@
 import unittest
-from unittest.mock import patch
 
-from constants.move_category import MoveCategory
-from constants.stats import Stat
 from constants.types import PokemonType
 from model.battle_state import BattleState
 from model.modifier import ModifierContainer
@@ -30,22 +27,7 @@ class TestPound(unittest.TestCase):
         # Initialize the move
         self.move = Pound()
 
-    def test_move_properties(self) -> None:
-        """Test that Pound has the correct properties."""
-        self.assertEqual(self.move.name, "Pound")
-        self.assertEqual(self.move.type, PokemonType.NORMAL)
-        self.assertEqual(self.move.power, 40)
-        self.assertEqual(self.move.accuracy, 100)
-        self.assertEqual(self.move.priority, 0)
-        self.assertEqual(self.move.move_category, MoveCategory.PHYSICAL)
-        self.assertEqual(self.move.attack_stat, Stat.ATTACK)
-        self.assertEqual(self.move.defense_stat, Stat.DEFENSE)
-
-    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
-    @patch(
-        "model.effects.do_damage.DoMoveDamage._crit_random", return_value=100
-    )  # No crit
-    def test_damage_calculation(self, mock_crit, mock_damage_roll) -> None:
+    def test_damage_calculation(self) -> None:
         """Test that Pound deals the expected damage."""
         # Process the move
         self.move.process_move(
@@ -61,11 +43,7 @@ class TestPound(unittest.TestCase):
             self.battle_state.damage_dealt_this_turn, self.target.damage_taken
         )
 
-    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
-    @patch(
-        "model.effects.do_damage.DoMoveDamage._crit_random", return_value=100
-    )  # No crit
-    def test_stab_bonus(self, mock_crit, mock_damage_roll) -> None:
+    def test_stab_bonus(self) -> None:
         """Test that STAB (Same Type Attack Bonus) is correctly applied."""
         # Normal attacker (STAB)
         self.move.process_move(

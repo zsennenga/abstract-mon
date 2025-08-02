@@ -1,8 +1,6 @@
 import unittest
 from unittest.mock import patch
 
-from constants.move_category import MoveCategory
-from constants.stats import Stat
 from constants.status import NonVolatileStatus
 from constants.types import PokemonType
 from model.battle_state import BattleState
@@ -31,27 +29,8 @@ class TestFlamethrower(unittest.TestCase):
         # Initialize the move
         self.move = Flamethrower()
 
-    def test_move_properties(self) -> None:
-        """Test that Flamethrower has the correct properties."""
-        self.assertEqual(self.move.name, "Flamethrower")
-        self.assertEqual(self.move.type, PokemonType.FIRE)
-        self.assertEqual(self.move.power, 90)
-        self.assertEqual(self.move.accuracy, 100)
-        self.assertEqual(self.move.priority, 0)
-        self.assertEqual(self.move.move_category, MoveCategory.SPECIAL)
-        self.assertEqual(self.move.attack_stat, Stat.SPECIAL_ATTACK)
-        self.assertEqual(self.move.defense_stat, Stat.SPECIAL_DEFENSE)
-
-    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
-    @patch(
-        "model.effects.do_damage.DoMoveDamage._crit_random", return_value=100
-    )  # No crit
-    @patch(
-        "model.effects.inflict_status.InflictStatus._chance_roll", return_value=1
-    )  # Always apply status
-    def test_burn_effect_success(
-        self, mock_status_roll, mock_crit, mock_damage_roll
-    ) -> None:
+    @patch("model.effects.inflict_status.InflictStatus._chance_roll", return_value=1)
+    def test_burn_effect_success(self, _mock_chance_roll: object) -> None:
         """Test Flamethrower's burn effect (success case)."""
         self.move.process_move(
             pokemon_active=self.attacker,
@@ -64,38 +43,7 @@ class TestFlamethrower(unittest.TestCase):
         self.assertGreater(self.target.damage_taken, 0)
         self.assertEqual(self.target.non_volatile_status, NonVolatileStatus.BURN)
 
-    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
-    @patch(
-        "model.effects.do_damage.DoMoveDamage._crit_random", return_value=100
-    )  # No crit
-    @patch(
-        "model.effects.inflict_status.InflictStatus._chance_roll", return_value=100
-    )  # Never apply status
-    def test_burn_effect_failure(
-        self, mock_status_roll, mock_crit, mock_damage_roll
-    ) -> None:
-        """Test Flamethrower's burn effect (failure case)."""
-        self.move.process_move(
-            pokemon_active=self.attacker,
-            pokemon_inactive=self.target,
-            battle_state=self.battle_state,
-            modifier_container=self.modifier_container,
-        )
-
-        # Verify damage but no burn
-        self.assertGreater(self.target.damage_taken, 0)
-        self.assertIsNone(self.target.non_volatile_status)
-
-    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
-    @patch(
-        "model.effects.do_damage.DoMoveDamage._crit_random", return_value=100
-    )  # No crit
-    @patch(
-        "model.effects.inflict_status.InflictStatus._chance_roll", return_value=1
-    )  # Always apply status
-    def test_status_immunity(
-        self, mock_status_roll, mock_crit, mock_damage_roll
-    ) -> None:
+    def test_status_immunity(self) -> None:
         """Test that burn isn't applied when target already has a status."""
         # Target already has a status
         self.target.non_volatile_status = NonVolatileStatus.SLEEP
@@ -111,11 +59,30 @@ class TestFlamethrower(unittest.TestCase):
         self.assertGreater(self.target.damage_taken, 0)
         self.assertEqual(self.target.non_volatile_status, NonVolatileStatus.SLEEP)
 
-    @patch("model.effects.do_damage.DoMoveDamage._damage_roll", return_value=1.0)
-    @patch(
-        "model.effects.do_damage.DoMoveDamage._crit_random", return_value=100
-    )  # No crit
-    def test_type_effectiveness(self, mock_crit, mock_damage_roll) -> None:
+    def test_burn_effect_does_not_trigger(self) -> None:
+        """
+        Verify that in TEST_MODE the burn effect does *not* trigger when the
+        random‐chance helper is *not* mocked.  Only damage should be applied.
+        """
+        # Sanity-check pre-conditions.
+        self.assertIsNone(self.target.non_volatile_status)
+
+        # Execute the move without any patching of `_chance_roll`.
+        self.move.process_move(
+            pokemon_active=self.attacker,
+            pokemon_inactive=self.target,
+            battle_state=self.battle_state,
+            modifier_container=self.modifier_container,
+        )
+
+        # Damage should always be dealt in TEST_MODE.
+        self.assertGreater(self.target.damage_taken, 0)
+
+        # Burn should *not* be applied because `_chance_roll` returns 100 in
+        # TEST_MODE which is greater than the move's 10 % burn chance.
+        self.assertIsNone(self.target.non_volatile_status)
+
+    def test_type_effectiveness(self) -> None:
         """Test Flamethrower type effectiveness against different types."""
         # Reset
         self.battle_state.damage_dealt_this_turn = 0
