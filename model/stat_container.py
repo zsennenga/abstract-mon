@@ -62,3 +62,16 @@ class StatContainer(BaseModel):
 
     def get_stat_stage(self, stat: Stat) -> int:
         return normalize_stage(self.stat_change_stages.get(stat, 0))
+
+    def set_stat_stage(self, stat: Stat, stage: int) -> None:
+        """
+        Explicitly set a stat's stage value.
+
+        Parameters
+        ----------
+        stat : Stat
+            The stat whose stage should be updated.
+        stage : int
+            The new stage value to set (will be normalized to valid bounds).
+        """
+        self.stat_change_stages[stat] = normalize_stage(stage)
