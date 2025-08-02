@@ -21,7 +21,7 @@ class ChanceEffect(Effect):
     """
 
     # Pydantic model fields
-    chance: float
+    chance: int
     inner_effect: Effect
 
     def _chance_roll(self) -> int:
